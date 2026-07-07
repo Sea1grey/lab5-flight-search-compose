@@ -3,6 +3,7 @@ package com.sergey.flightsearch.dao
 import androidx.room.Dao
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import com.sergey.flightsearch.entity.Airport
 
 @Dao
 interface AirportDao {

@@ -1,7 +1,7 @@
 package com.sergey.flightsearch.dao
 
 import androidx.room.*
-
+import com.sergey.flightsearch.entity.Favorite
 import kotlinx.coroutines.flow.Flow
 
 @Dao
