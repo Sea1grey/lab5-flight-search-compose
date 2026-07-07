@@ -5,6 +5,7 @@ import com.sergey.flightsearch.dao.FavoriteDao
 import com.sergey.flightsearch.entity.Airport
 import com.sergey.flightsearch.entity.Favorite
 import kotlinx.coroutines.flow.Flow
+import com.sergey.flightsearch.model.Flight
 
 class FlightRepository(
     private val airportDao: AirportDao,
@@ -29,5 +30,21 @@ class FlightRepository(
 
     suspend fun removeFavorite(favorite: Favorite) {
         favoriteDao.delete(favorite)
+    }
+
+    suspend fun getFlights(departureCode: String): List<Flight> {
+
+        val departure = airportDao.getAirportByCode(departureCode)
+            ?: return emptyList()
+
+        val destinations = airportDao.getDestinations(departureCode)
+
+        return destinations.map { destination ->
+            Flight(
+                departure = departure,
+                destination = destination,
+                isFavorite = false
+            )
+        }
     }
 }
