@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import com.sergey.flightsearch.ui.theme.FlightSearchTheme
 import com.sergey.flightsearch.db.AppDatabase
 import com.sergey.flightsearch.repository.FlightRepository
-import com.sergey.flightsearch.ui.theme.FlightScreen
+import com.sergey.flightsearch.ui.FlightScreen
 import com.sergey.flightsearch.viewmodel.FlightViewModel
 import com.sergey.flightsearch.viewmodel.FlightViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel

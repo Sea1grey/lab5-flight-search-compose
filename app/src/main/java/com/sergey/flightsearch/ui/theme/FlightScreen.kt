@@ -1,4 +1,4 @@
-package com.sergey.flightsearch.ui.theme
+package com.sergey.flightsearch.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
