@@ -10,6 +10,10 @@ class FlightViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return FlightViewModel(repository) as T
+        if (modelClass.isAssignableFrom(FlightViewModel::class.java)) {
+            return FlightViewModel(repository) as T
+        }
+
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
