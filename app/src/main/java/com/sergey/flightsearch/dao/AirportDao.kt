@@ -23,4 +23,11 @@ interface AirportDao {
         LIMIT 1
     """)
     suspend fun getAirportByCode(code: String): Airport?
+
+    @Query("""
+    SELECT * FROM airport
+    WHERE iata_code != :departureCode
+    ORDER BY passengers DESC
+""")
+    suspend fun getDestinations(departureCode: String): List<Airport>
 }
