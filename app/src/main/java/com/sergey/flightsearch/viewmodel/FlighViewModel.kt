@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import com.sergey.flightsearch.model.Flight
 import kotlinx.coroutines.launch
+import com.sergey.flightsearch.entity.Favorite
+import kotlinx.coroutines.launch
 
 class FlightViewModel(
     private val repository: FlightRepository
@@ -38,6 +40,27 @@ class FlightViewModel(
     fun loadFlights(departureCode: String) {
         viewModelScope.launch {
             _flights.value = repository.getFlights(departureCode)
+        }
+    }
+
+    fun toggleFavorite(flight: Flight) {
+        viewModelScope.launch {
+
+            if (flight.isFavorite) {
+                repository.removeFavorite(
+                    flight.departure.iata_code,
+                    flight.destination.iata_code
+                )
+            } else {
+                repository.addFavorite(
+                    Favorite(
+                        departure_code = flight.departure.iata_code,
+                        destination_code = flight.destination.iata_code
+                    )
+                )
+            }
+
+            loadFlights(flight.departure.iata_code)
         }
     }
 }

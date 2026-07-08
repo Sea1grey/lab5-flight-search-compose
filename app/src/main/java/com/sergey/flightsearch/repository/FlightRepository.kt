@@ -28,10 +28,6 @@ class FlightRepository(
         favoriteDao.insert(favorite)
     }
 
-    suspend fun removeFavorite(favorite: Favorite) {
-        favoriteDao.delete(favorite)
-    }
-
     suspend fun getFlights(departureCode: String): List<Flight> {
 
         val departure = airportDao.getAirportByCode(departureCode)
@@ -40,11 +36,31 @@ class FlightRepository(
         val destinations = airportDao.getDestinations(departureCode)
 
         return destinations.map { destination ->
+
+            val isFavorite = favoriteDao.isFavorite(
+                departure.iata_code,
+                destination.iata_code
+            ) > 0
+
             Flight(
                 departure = departure,
                 destination = destination,
-                isFavorite = false
+                isFavorite = isFavorite
             )
         }
+    }
+
+    suspend fun isFavorite(
+        departure: String,
+        destination: String
+    ): Boolean {
+        return favoriteDao.isFavorite(departure, destination) > 0
+    }
+
+    suspend fun removeFavorite(
+        departure: String,
+        destination: String
+    ) {
+        favoriteDao.deleteFavorite(departure, destination)
     }
 }

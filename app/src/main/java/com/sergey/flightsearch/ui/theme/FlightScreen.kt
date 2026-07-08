@@ -15,6 +15,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sergey.flightsearch.viewmodel.FlightViewModel
 import androidx.compose.foundation.clickable
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.filled.Favorite
+
 @Composable
 fun FlightScreen(
     viewModel: FlightViewModel
@@ -78,10 +86,32 @@ fun FlightScreen(
 
                 items(flights) { flight ->
 
-                    Text(
-                        text = "${flight.departure.iata_code} → ${flight.destination.iata_code}",
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "${flight.departure.iata_code} → ${flight.destination.iata_code}"
+                        )
+
+                        IconButton(
+                            onClick = {
+                                viewModel.toggleFavorite(flight)
+                            }
+                        ) {
+                            Icon(
+                                imageVector =
+                                    if (flight.isFavorite)
+                                        Icons.Default.Favorite
+                                    else
+                                        Icons.Default.FavoriteBorder,
+                                contentDescription = null
+                            )
+                        }
+                    }
 
                 }
 
