@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.onEach
 import com.sergey.flightsearch.model.Flight
 import kotlinx.coroutines.launch
 import com.sergey.flightsearch.entity.Favorite
-import kotlinx.coroutines.launch
 
 class FlightViewModel(
     private val repository: FlightRepository
@@ -63,4 +62,16 @@ class FlightViewModel(
             loadFlights(flight.departure.iata_code)
         }
     }
+
+    private val _favorites = MutableStateFlow<List<Favorite>>(emptyList())
+    val favorites: StateFlow<List<Favorite>> = _favorites.asStateFlow()
+
+    init {
+        repository.getFavorites()
+            .onEach {
+                _favorites.value = it
+            }
+            .launchIn(viewModelScope)
+    }
+
 }

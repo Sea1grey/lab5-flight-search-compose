@@ -37,6 +37,7 @@ fun FlightScreen(
 
     val airports by viewModel.airports.collectAsStateWithLifecycle()
     val flights by viewModel.flights.collectAsStateWithLifecycle()
+    val favorites by viewModel.favorites.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -75,12 +76,19 @@ fun FlightScreen(
 
         }
 
-        if (flights.isNotEmpty()) {
+        if (searchText.isBlank()) {
 
-            Text(
-                text = "Flights",
-                modifier = Modifier.padding(vertical = 16.dp)
-            )
+            LazyColumn {
+                items(favorites) { favorite ->
+
+                    Text(
+                        text = "${favorite.departure_code} → ${favorite.destination_code}",
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+
+        } else {
 
             LazyColumn {
 
