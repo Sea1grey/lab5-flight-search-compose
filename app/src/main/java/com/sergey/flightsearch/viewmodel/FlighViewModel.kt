@@ -91,9 +91,4 @@ class FlightViewModel(
             }
             .launchIn(viewModelScope)
     }
-
-
-
-
-
 }

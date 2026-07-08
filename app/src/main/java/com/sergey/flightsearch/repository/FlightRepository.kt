@@ -18,10 +18,6 @@ class FlightRepository(
         return airportDao.searchAirports(query)
     }
 
-    suspend fun getAirportByCode(code: String): Airport? {
-        return airportDao.getAirportByCode(code)
-    }
-
     fun getFavorites(): Flow<List<Favorite>> {
         return favoriteDao.getAllFavorites()
     }
@@ -50,13 +46,6 @@ class FlightRepository(
                 isFavorite = isFavorite
             )
         }
-    }
-
-    suspend fun isFavorite(
-        departure: String,
-        destination: String
-    ): Boolean {
-        return favoriteDao.isFavorite(departure, destination) > 0
     }
 
     suspend fun removeFavorite(

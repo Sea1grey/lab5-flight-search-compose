@@ -1,4 +1,4 @@
-package com.sergey.flightsearch.ui.theme
+package com.sergey.flightsearch.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,10 +40,6 @@ fun FlightScreen(
         }
     }
 
-    var airportSelected by remember {
-        mutableStateOf(false)
-    }
-
     val airports by viewModel.airports.collectAsStateWithLifecycle()
     val flights by viewModel.flights.collectAsStateWithLifecycle()
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
@@ -58,7 +54,6 @@ fun FlightScreen(
             value = searchText,
             onValueChange = {
                 searchText = it
-                airportSelected = false
                 viewModel.search(it)
             },
             modifier = Modifier.fillMaxWidth(),
@@ -77,7 +72,6 @@ fun FlightScreen(
                         .fillMaxWidth()
                         .padding(12.dp)
                         .clickable {
-                            airportSelected = true
                             viewModel.loadFlights(airport.iata_code)
                             viewModel.saveSearch(airport.iata_code)
                         }
