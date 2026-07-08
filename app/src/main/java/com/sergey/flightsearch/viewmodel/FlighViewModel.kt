@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.Job
+import com.sergey.flightsearch.model.Flight
+import kotlinx.coroutines.launch
 
 class FlightViewModel(
     private val repository: FlightRepository
@@ -29,5 +30,14 @@ class FlightViewModel(
                 _airports.value = airports
             }
             .launchIn(viewModelScope)
+    }
+
+    private val _flights = MutableStateFlow<List<Flight>>(emptyList())
+    val flights: StateFlow<List<Flight>> = _flights.asStateFlow()
+
+    fun loadFlights(departureCode: String) {
+        viewModelScope.launch {
+            _flights.value = repository.getFlights(departureCode)
+        }
     }
 }

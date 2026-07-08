@@ -1,4 +1,4 @@
-package com.sergey.flightsearch.ui
+package com.sergey.flightsearch.ui.theme
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sergey.flightsearch.viewmodel.FlightViewModel
+import androidx.compose.foundation.clickable
 
 @Composable
 fun FlightScreen(
@@ -22,7 +23,12 @@ fun FlightScreen(
         mutableStateOf("")
     }
 
+    var airportSelected by remember {
+        mutableStateOf(false)
+    }
+
     val airports by viewModel.airports.collectAsStateWithLifecycle()
+    val flights by viewModel.flights.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -34,6 +40,7 @@ fun FlightScreen(
             value = searchText,
             onValueChange = {
                 searchText = it
+                airportSelected = false
                 viewModel.search(it)
             },
             modifier = Modifier.fillMaxWidth(),
@@ -48,10 +55,37 @@ fun FlightScreen(
 
                 Text(
                     text = "${airport.iata_code} - ${airport.name}",
-                    modifier = Modifier.padding(12.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .clickable {
+                            airportSelected = true
+                            viewModel.loadFlights(airport.iata_code)
+                        }
                 )
             }
 
+        }
+
+        if (flights.isNotEmpty()) {
+
+            Text(
+                text = "Flights",
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+
+            LazyColumn {
+
+                items(flights) { flight ->
+
+                    Text(
+                        text = "${flight.departure.iata_code} → ${flight.destination.iata_code}",
+                        modifier = Modifier.padding(12.dp)
+                    )
+
+                }
+
+            }
         }
 
     }
