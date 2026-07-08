@@ -22,13 +22,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun FlightScreen(
     viewModel: FlightViewModel
 ) {
-    var searchText by remember {
+    val savedSearch by viewModel.savedSearch.collectAsStateWithLifecycle()
+
+    var searchText by rememberSaveable {
         mutableStateOf("")
+    }
+
+    LaunchedEffect(savedSearch) {
+        if (savedSearch.isNotBlank() && searchText.isBlank()) {
+            searchText = savedSearch
+        }
     }
 
     var airportSelected by remember {
@@ -70,6 +79,7 @@ fun FlightScreen(
                         .clickable {
                             airportSelected = true
                             viewModel.loadFlights(airport.iata_code)
+                            viewModel.saveSearch(airport.iata_code)
                         }
                 )
             }

@@ -6,10 +6,12 @@ import com.sergey.flightsearch.entity.Airport
 import com.sergey.flightsearch.entity.Favorite
 import kotlinx.coroutines.flow.Flow
 import com.sergey.flightsearch.model.Flight
+import com.sergey.flightsearch.datastore.SearchPreferences
 
 class FlightRepository(
     private val airportDao: AirportDao,
-    private val favoriteDao: FavoriteDao
+    private val favoriteDao: FavoriteDao,
+    private val searchPreferences: SearchPreferences
 ) {
 
     fun searchAirports(query: String): Flow<List<Airport>> {
@@ -62,5 +64,13 @@ class FlightRepository(
         destination: String
     ) {
         favoriteDao.deleteFavorite(departure, destination)
+    }
+
+    suspend fun saveSearch(query: String) {
+        searchPreferences.saveSearch(query)
+    }
+
+    fun getSavedSearch(): Flow<String> {
+        return searchPreferences.searchQuery
     }
 }

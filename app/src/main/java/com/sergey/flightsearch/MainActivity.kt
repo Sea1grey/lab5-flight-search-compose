@@ -11,6 +11,7 @@ import com.sergey.flightsearch.ui.theme.FlightScreen
 import com.sergey.flightsearch.viewmodel.FlightViewModel
 import com.sergey.flightsearch.viewmodel.FlightViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sergey.flightsearch.datastore.SearchPreferences
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
 
                 val repository = FlightRepository(
                     database.airportDao(),
-                    database.favoriteDao()
+                    database.favoriteDao(),
+                    SearchPreferences(applicationContext)
                 )
 
                 val factory = FlightViewModelFactory(repository)

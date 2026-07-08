@@ -33,6 +33,12 @@ class FlightViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun saveSearch(query: String) {
+        viewModelScope.launch {
+            repository.saveSearch(query)
+        }
+    }
+
     private val _flights = MutableStateFlow<List<Flight>>(emptyList())
     val flights: StateFlow<List<Flight>> = _flights.asStateFlow()
 
@@ -65,6 +71,8 @@ class FlightViewModel(
 
     private val _favorites = MutableStateFlow<List<Favorite>>(emptyList())
     val favorites: StateFlow<List<Favorite>> = _favorites.asStateFlow()
+    private val _savedSearch = MutableStateFlow("")
+    val savedSearch: StateFlow<String> = _savedSearch.asStateFlow()
 
     init {
         repository.getFavorites()
@@ -72,6 +80,20 @@ class FlightViewModel(
                 _favorites.value = it
             }
             .launchIn(viewModelScope)
+        repository.getSavedSearch()
+            .onEach { query ->
+                _savedSearch.value = query
+
+                if (query.isNotBlank()) {
+                    search(query)
+                    loadFlights(query)
+                }
+            }
+            .launchIn(viewModelScope)
     }
+
+
+
+
 
 }
